@@ -1,21 +1,22 @@
 <?php
+
 namespace Ankur\Plugins\WP_Version_Faker;
 
-    /**
-     * Plugin Name: WP Version Faker
-     * Plugin URI: https://github.com/ankurk91/wp-version-faker
-     * Description: WordPress Version Faker
-     * Version: 1.0.0
-     * Author: Ankur Kumar
-     * Author URI: http://ankurk91.github.io/
-     * License: MIT
-     * License URI: https://opensource.org/licenses/MIT
-     */
+/**
+ * Plugin Name: WP Version Faker
+ * Plugin URI: https://github.com/ankurk91/wp-version-faker
+ * Description: WordPress Version Faker
+ * Version: 1.0.1
+ * Author: Ankur Kumar
+ * Author URI: http://ankurk91.github.io/
+ * License: MIT
+ * License URI: https://opensource.org/licenses/MIT
+ */
 
 // No direct access
 if (!defined('ABSPATH')) die;
 
-define('AVF_PLUGIN_VER', '1.0.0');
+define('AVF_PLUGIN_VER', '1.0.1');
 define('AVF_BASE_FILE', __FILE__);
 
 class WP_Version_Faker
@@ -79,6 +80,7 @@ class WP_Version_Faker
 
     /**
      * Override WordPress version number
+     * Magic happens here
      */
     public function override_version()
     {
@@ -94,19 +96,25 @@ class WP_Version_Faker
     private function call_wp_api()
     {
         global $wp_version;
+
         $response = wp_remote_get(self::API_URL, array());
 
+        // If failed then return previously stored version
         if (is_wp_error($response) || 200 != wp_remote_retrieve_response_code($response)) {
             return $wp_version;
         }
 
         $body = trim(wp_remote_retrieve_body($response));
         $body = json_decode($body);
-        //pick first offer
+        // Pick first offer
         return $body->offers[0]->version;
 
     }
 
+    /**
+     * Delete the db entry made by this plugin
+     * @return bool
+     */
     public function do_upon_plugin_deactivation()
     {
         return $this->delete_transient();

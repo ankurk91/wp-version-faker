@@ -1,8 +1,8 @@
 === WP Version Faker===
 Tags: faker, version, hide, security
 Requires at least: 3.8.0
-Tested up to: 4.6.1
-Stable tag: 1.0.0
+Tested up to: 4.7.4
+Stable tag: 1.0.1
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 Contributors: ankurk91
